@@ -53,10 +53,10 @@ def allowed_file(filename):
            
 
 	
-@app.route('/uploader', methods = ['GET','POST'])
+@app.route('/SVM', methods = ['GET','POST'])
 def upload_file():
    if request.method == 'GET':
-       return "hello"
+       return "svm"
    if request.method == 'POST':
          file = request.files['file']
          if file.filename == '':
@@ -76,7 +76,7 @@ def upload_file():
           print(music_class)
           return music_class
 
-@app.route('/uploadervgg', methods = ['GET','POST'])
+@app.route('/VGG', methods = ['GET','POST'])
 def classify_vgg():
     if request.method == 'GET':
            return "hello"
@@ -90,18 +90,15 @@ def classify_vgg():
                    
           base_model = VGG19(weights='imagenet')
           model = Model(inputs=base_model.input, outputs=base_model.get_layer('flatten').output)
-          image = load_img(UPLOAD_FOLDER+'/'+filename, target_size=(224, 224, 3))
+          image = load_img(UPLOAD_FOLDER+'/'+filename, target_size=(126, 126, 3))
           np.expand_dims(image, axis=0)
           image = img_to_array(image)
           image = image.reshape((1, image.shape[0], image.shape[1], image.shape[2]))
 
           image = preprocess_input(image)
           yhat = model.predict(image)
-    # create a list containing the class labels
           class_labels = ["blues", "classical", "country", "disco", "hiphop", "metal", "pop", "reggae", "rock"]
-    # find the index of the class with maximum score
           pred = np.argmax(class_labels, axis=-1)
-    # print the label of the class with maximum score
           return class_labels[pred]
           
           
